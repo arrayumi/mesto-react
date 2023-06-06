@@ -6,7 +6,7 @@ import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
-import Api from '../components/Api.js';
+// import Api from '../components/Api.js';
 import PopupWithConfirmation from '../components/PopupWithConfirmation';
 import {
   formConfig, editProfileButton, addCardButton, editProfileForm, saveCardForm,
@@ -25,14 +25,6 @@ const editAvatarFormValidator = new FormValidator(formConfig, editAvatarForm);
 editAvatarFormValidator.enableValidation();
 
 // создание экземпляра класса Api
-
-const api = new Api({
-  url: 'https://mesto.nomoreparties.co/v1/cohort-64',
-  headers: {
-    'Content-Type': 'application/json',
-    authorization: 'f1afbe96-9e70-49c1-99e4-7a6e5025fa3b'
-  }
-});
 
 // создаем экземпляр класса инфо о пользователе
 

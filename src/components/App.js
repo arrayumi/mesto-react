@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
 import ImagePopup from './ImagePopup.js';
-import PopupWithFormReact from './PopupWithFormReact.js';
+import PopupWithForm from './PopupWithForm.js';
 
 
 function App() {
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+    const [selectedCard, setSelectedCard] = useState({});
 
     function handleEditAvatarClick() {
         setIsEditAvatarPopupOpen(true);
@@ -23,10 +24,15 @@ function App() {
         setIsAddPlacePopupOpen(true);;
     }
 
+    function handleCardClick(card) {
+        setSelectedCard(card);
+    }
+
     function closeAllPopups() {
         setIsEditProfilePopupOpen(false);
         setIsAddPlacePopupOpen(false);
         setIsEditAvatarPopupOpen(false);
+        setSelectedCard({});
     }
 
     return (
@@ -35,9 +41,10 @@ function App() {
             <Main
                 onEditAvatar={handleEditAvatarClick}
                 onEditProfile={handleEditProfileClick}
-                onAddPlace={handleAddPlaceClick} />
+                onAddPlace={handleAddPlaceClick}
+                onCardClick={handleCardClick} />
 
-            <PopupWithFormReact
+            <PopupWithForm
                 title={"Редактировать профиль"}
                 name={"edit-profile"}
                 onClose={closeAllPopups}
@@ -46,18 +53,18 @@ function App() {
                     <label className="popup__field">
                         <input id="input-username" className="popup__input popup__input_type_name" type="text" placeholder="Имя"
                             name="name" required minLength="2" maxLength="40" />
-                        <span id="input-username-error" class="popup__input-error"></span>
+                        <span id="input-username-error" className="popup__input-error"></span>
                     </label>
                     <label className="popup__field">
                         <input id="input-about" className="popup__input popup__input_type_about" type="text"
                             placeholder="О себе" name="about" required minLength="2" maxLength="200" />
-                        <span id="input-about-error" class="popup__input-error"></span>
+                        <span id="input-about-error" className="popup__input-error"></span>
                     </label>
-                    <button class="popup__button popup__button_type_save" type="submit">Сохранить</button>
+                    <button className="popup__button popup__button_type_save" type="submit">Сохранить</button>
                 </>
-            </PopupWithFormReact>
+            </PopupWithForm>
 
-            <PopupWithFormReact
+            <PopupWithForm
                 title={"Новое место"}
                 name={"add-card"}
                 onClose={closeAllPopups}
@@ -75,9 +82,9 @@ function App() {
                     </label>
                     <button className="popup__button popup__button_type_save" type="submit">Создать</button>
                 </>
-            </PopupWithFormReact>
+            </PopupWithForm>
 
-            <PopupWithFormReact
+            <PopupWithForm
                 title={"Обновить аватар"}
                 name={"add-card"}
                 onClose={closeAllPopups}
@@ -90,7 +97,18 @@ function App() {
                     </label>
                     <button className="popup__button popup__button_type_save" type="submit">Сохранить</button>
                 </>
-            </PopupWithFormReact>
+            </PopupWithForm>
+
+            <PopupWithForm
+                title={"Вы уверены?"}
+                name={"confirmation"}
+                onClose={closeAllPopups}>
+                <button className="popup__button popup__button_type_save" type="submit">Да</button>
+            </PopupWithForm>
+
+            <ImagePopup
+                card={selectedCard}
+                onClose={closeAllPopups} />
 
             <Footer />
         </div>
