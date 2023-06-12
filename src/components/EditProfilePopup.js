@@ -11,7 +11,7 @@ export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
     useEffect(() => {
         setName(currentUser.name);
         setDescription(currentUser.about);
-    }, [currentUser]);
+    }, [currentUser, isOpen]);
 
     function handleNameChange(e) {
         setName(e.target.value);
@@ -40,12 +40,12 @@ export default function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
             <>
                 <label className="popup__field">
                     <input id="input-username" className="popup__input popup__input_type_name" type="text" placeholder="Имя"
-                        name="name" required minLength="2" maxLength="40" value={name} onChange={handleNameChange} />
+                        name="name" required minLength="2" maxLength="40" value={name || ''} onChange={handleNameChange} />
                     <span id="input-username-error" className="popup__input-error"></span>
                 </label>
                 <label className="popup__field">
                     <input id="input-about" className="popup__input popup__input_type_about" type="text"
-                        placeholder="О себе" name="about" required minLength="2" maxLength="200" value={description} onChange={handleDescriptionChange} />
+                        placeholder="О себе" name="about" required minLength="2" maxLength="200" value={description || ''} onChange={handleDescriptionChange} />
                     <span id="input-about-error" className="popup__input-error"></span>
                 </label>
             </>
