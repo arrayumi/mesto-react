@@ -4,6 +4,7 @@ import Main from './Main.js';
 import Footer from './Footer.js';
 import ImagePopup from './ImagePopup.js';
 import PopupWithForm from './PopupWithForm.js';
+import EditProfilePopup from './EditProfilePopup.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import api from '../utils/api.js';
 
@@ -66,11 +67,19 @@ function App() {
     }
 
     function handleCardDelete(_id) {
-        console.log(_id);
         api.deleteItem(_id)
             .then(() => {
                 setCards((state) => state.filter((c) => c._id !== _id));
             })
+            .catch(err => console.log(err));
+    }
+
+    function handleUpdateUser(userInfo) {
+        api.setUserInfo(userInfo)
+            .then((newInfo) => {
+                setCurrentUser(newInfo);
+            })
+            .then(() => closeAllPopups())
             .catch(err => console.log(err));
     }
 
@@ -87,25 +96,7 @@ function App() {
                     onCardLike={handleCardLike}
                     onCardDelete={handleCardDelete} />
 
-                <PopupWithForm
-                    title={"Редактировать профиль"}
-                    name={"edit-profile"}
-                    onClose={closeAllPopups}
-                    isOpen={isEditProfilePopupOpen}
-                    buttonText={"Сохранить"}>
-                    <>
-                        <label className="popup__field">
-                            <input id="input-username" className="popup__input popup__input_type_name" type="text" placeholder="Имя"
-                                name="name" required minLength="2" maxLength="40" />
-                            <span id="input-username-error" className="popup__input-error"></span>
-                        </label>
-                        <label className="popup__field">
-                            <input id="input-about" className="popup__input popup__input_type_about" type="text"
-                                placeholder="О себе" name="about" required minLength="2" maxLength="200" />
-                            <span id="input-about-error" className="popup__input-error"></span>
-                        </label>
-                    </>
-                </PopupWithForm>
+                <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
 
                 <PopupWithForm
                     title={"Новое место"}
