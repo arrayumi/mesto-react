@@ -9,6 +9,7 @@ export default function EditAvatarPopup({ onClose, isOpen, onUpdateAvatar }) {
         onUpdateAvatar({
             avatar: inputRef.current.value,
         });
+        e.target.reset();
     }
 
     return (

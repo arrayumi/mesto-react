@@ -8,6 +8,7 @@ import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import api from '../utils/api.js';
+import AddPlacePopup from './AddPlacePopup.js';
 
 
 
@@ -93,6 +94,13 @@ function App() {
             .catch(err => console.log(err));
     }
 
+    function handleAddPlaceSubmit(card) {
+        api.addItem(card)
+            .then((newCard )=> {setCards([newCard, ...cards])})
+            .then(() => closeAllPopups())
+            .catch(err => console.log(err));
+    }
+
     return (
         <div className="page">
             <CurrentUserContext.Provider value={currentUser}>
@@ -107,26 +115,7 @@ function App() {
                     onCardDelete={handleCardDelete} />
 
                 <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
-
-                <PopupWithForm
-                    title={"Новое место"}
-                    name={"add-card"}
-                    onClose={closeAllPopups}
-                    isOpen={isAddPlacePopupOpen}
-                    buttonText={"Создать"}>
-                    <>
-                        <label className="popup__field">
-                            <input id="input-name" className="popup__input popup__input_type_name" type="text"
-                                placeholder="Название" name="name" required minLength="2" maxLength="30" />
-                            <span id="input-name-error" className="popup__input-error"></span>
-                        </label>
-                        <label className="popup__field">
-                            <input id="input-url" className="popup__input popup__input_type_url" type="url"
-                                placeholder="Ссылка на картинку" name="link" required />
-                            <span id="input-url-error" className="popup__input-error"></span>
-                        </label>
-                    </>
-                </PopupWithForm>
+                <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
 
                 <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
 
