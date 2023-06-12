@@ -5,11 +5,12 @@ import Footer from './Footer.js';
 import ImagePopup from './ImagePopup.js';
 import PopupWithForm from './PopupWithForm.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
-import api  from '../utils/api.js';
+import api from '../utils/api.js';
 
 
 
 function App() {
+    const [cards, setCards] = useState([]);
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
@@ -19,14 +20,17 @@ function App() {
     useEffect(() => {
         Promise.all([
             api.getUserInfo(),
+            api.getCards()
         ])
-            .then(([userData]) => {
+            .then(([userData, cards]) => {
                 setCurrentUser(userData);
+                setCards(cards);
             })
             .catch(err => {
                 console.log(err);
             });
     }, []);
+
 
     function handleEditAvatarClick() {
         setIsEditAvatarPopupOpen(true);
@@ -51,6 +55,25 @@ function App() {
         setSelectedCard({});
     }
 
+    function handleCardLike(card) {
+        const isLiked = card.likes.some(i => i._id === currentUser._id);
+
+        api.changeLikeCardStatus(card._id, !isLiked)
+            .then((newCard) => {
+                setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+            })
+            .catch(err => console.log(err));
+    }
+
+    function handleCardDelete(_id) {
+        console.log(_id);
+        api.deleteItem(_id)
+            .then(() => {
+                setCards((state) => state.filter((c) => c._id !== _id));
+            })
+            .catch(err => console.log(err));
+    }
+
     return (
         <div className="page">
             <CurrentUserContext.Provider value={currentUser}>
@@ -59,7 +82,10 @@ function App() {
                     onEditAvatar={handleEditAvatarClick}
                     onEditProfile={handleEditProfileClick}
                     onAddPlace={handleAddPlaceClick}
-                    onCardClick={handleCardClick} />
+                    onCardClick={handleCardClick}
+                    cards={cards}
+                    onCardLike={handleCardLike}
+                    onCardDelete={handleCardDelete} />
 
                 <PopupWithForm
                     title={"Редактировать профиль"}

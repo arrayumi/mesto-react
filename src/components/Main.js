@@ -1,29 +1,15 @@
 import React from 'react';
-import { useEffect, useState, useContext } from 'react';
+import { useContext } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
-import api from '../utils/api.js';
 import Card from './Card.js';
 
-function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
+function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick, cards, onCardLike, onCardDelete }) {
 
-    const [cards, setCards] = useState([]);
     const currentUser = useContext(CurrentUserContext);
 
     const cardsList = cards.map(card => 
-        <Card key={card._id} card={card} onCardClick={onCardClick}/>
+        <Card key={card._id} card={card} onCardClick={onCardClick} onCardLike={onCardLike} onCardDelete={onCardDelete}/>
 )
-
-    // useEffect(() => {
-    //     Promise.all([
-    //         api.getCards(),
-    //     ])
-    //         .then((cards) => {
-    //             setCards(cards);
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
-    //         });
-    // }, []);
 
     return (
         <main className="page__element content">
